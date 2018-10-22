@@ -28,13 +28,16 @@ public class test {
 
     public static class Reduce extends Reducer<Text, IntWritable, Text, IntWritable> {
 
+        private IntWritable result = new IntWritable();
+
         public void reduce(Text key, Iterator<IntWritable> values, Context context)
                 throws IOException, InterruptedException {
             int sum = 0;
             while (values.hasNext()) {
                 sum += values.next().get();
             }
-            context.write(key, new IntWritable(sum));
+            result.set(sum);
+            context.write(key, result);
         }
     }
 

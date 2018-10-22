@@ -18,11 +18,9 @@ public class test {
 
         public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
             String line = value.toString();
-            StringTokenizer tokenizer = new StringTokenizer(line);
-            while (tokenizer.hasMoreTokens()) {
-                word.set(tokenizer.nextToken());
-                context.write(word, one);
-            }
+            String[] words = line.split(",");
+            word.set(words[5] + "," + words[6] + "-" + words[9] + "," + words[10]);
+            context.write(word, one);
         }
     }
 

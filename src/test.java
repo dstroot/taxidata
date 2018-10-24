@@ -65,9 +65,9 @@ public class test {
             @Override
             public int compare(IntWritable e1, IntWritable e2) {
                 if(e1.get()>e2.get()){
-                    return 1;
-                } else {
                     return -1;
+                } else {
+                    return 1;
                 }
             }
         }

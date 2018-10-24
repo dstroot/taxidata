@@ -16,7 +16,7 @@ public class test {
         private final static IntWritable one = new IntWritable(1);
         private Text word = new Text();
 
-        public void map(DoubleWritable key, Text value, Context context) throws IOException, InterruptedException {
+        public void map(IntWritable key, Text value, Context context) throws IOException, InterruptedException {
             String line = value.toString();
             String[] words = line.split(",");
             if (words.length > 10 && !words[0].equals("VendorID")) {

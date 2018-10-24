@@ -19,7 +19,7 @@ public class test {
         public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
             String line = value.toString();
             String[] words = line.split(",");
-            if (words.length > 10) {
+            if (words.length > 10 && !words[0].equals("VendorID")) {
                 word.set(words[5] + "," + words[6] + "-" + words[9] + "," + words[10]);
                 context.write(word, one);
             }

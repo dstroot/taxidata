@@ -30,11 +30,12 @@ public class test {
 
         private IntWritable result = new IntWritable();
 
-        public void reduce(Text key, Iterator<IntWritable> values, Context context)
+
+        public void reduce(Text key, Iterable<IntWritable> values, Context context)
                 throws IOException, InterruptedException {
             int sum = 0;
-            while (values.hasNext()) {
-                sum += values.next().get();
+            for (IntWritable value : values) {
+                sum += value.get();
             }
             result.set(sum);
             context.write(key, result);

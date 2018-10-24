@@ -55,8 +55,8 @@ public class test {
                 entry = iter.next();
                 iter.remove();
             }
-            for (IntWritable intWritable:sortedList.keySet()) {
-                context.write(sortedList.get(intWritable), intWritable);
+            for (Text text:sortedList.values()) {
+                context.write(text, new IntWritable(6));
             }
 
         }

@@ -60,7 +60,7 @@ public class test {
             }
 
             for (String key : sortedList.keySet()) {
-                context.write(new Text(key), new IntWritable(sortedList.get(key)));
+                //context.write(new Text(key), new IntWritable(sortedList.get(key)));
             }
 
         }

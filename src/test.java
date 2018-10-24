@@ -13,7 +13,6 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 public class test {
 
     public static class Map extends Mapper<LongWritable, Text, Text, DoubleWritable> {
-        private final static IntWritable one = new IntWritable(1);
         private Text word = new Text();
 
         public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
@@ -72,7 +71,7 @@ public class test {
         Job job = new Job(conf, "wordcount");
 
         job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(IntWritable.class);
+        job.setOutputValueClass(DoubleWritable.class);
 
         job.setMapperClass(Map.class);
         job.setReducerClass(Reduce.class);

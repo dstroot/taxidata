@@ -59,6 +59,10 @@ public class test {
                 context.write(flippedList.get(list.get(i)), new IntWritable(list.get(i)));
             }
 
+            for (Text key : sortedList.keySet()) {
+                context.write(key, new IntWritable(sortedList.get(key)));
+            }
+
         }
     }
 

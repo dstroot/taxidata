@@ -30,7 +30,7 @@ public class test {
 
         private IntWritable result = new IntWritable();
 
-        private TreeMap<IntWritable, Text> sortedList = new TreeMap<IntWritable, Text>(new MyComp());
+        private HashMap<Integer, Text> sortedList = new HashMap<Integer, Text>();
 
 
         public void reduce(Text key, Iterable<IntWritable> values, Context context)
@@ -40,32 +40,20 @@ public class test {
                 sum += value.get();
             }
             result.set(sum);
-            sortedList.put(result, key);
-            context.write(key, result);
+            sortedList.put(result.get(), key);
+            //context.write(key, result);
         }
 
         @Override
         protected void cleanup(Context context) throws IOException, InterruptedException {
             super.cleanup(context);
 
-            Iterator<java.util.Map.Entry<IntWritable , Text>> iter = sortedList.entrySet().iterator();
-            java.util.Map.Entry<IntWritable , Text> entry = null;
-
-            for (IntWritable intWritable:sortedList.keySet()) {
-                //context.write(sortedList.get(intWritable), intWritable);
+            ArrayList<Integer> list = new ArrayList<Integer>(sortedList.keySet());
+            Collections.sort(list);
+            for (int i = list.size() - 1; i > list.size() - 11; i--) {
+                context.write(sortedList.get(list.get(i)), new IntWritable(list.get(i)));
             }
 
-        }
-
-        static class MyComp implements Comparator<IntWritable>{
-            @Override
-            public int compare(IntWritable e1, IntWritable e2) {
-                if(e1.get()>e2.get()){
-                    return -1;
-                } else {
-                    return 1;
-                }
-            }
         }
     }
 

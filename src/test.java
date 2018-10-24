@@ -30,7 +30,7 @@ public class test {
 
         private IntWritable result = new IntWritable();
 
-        private HashMap<Text, Integer> sortedList = new HashMap<Text, Integer>();
+        private HashMap<String, Integer> sortedList = new HashMap<String, Integer>();
 
 
         public void reduce(Text key, Iterable<IntWritable> values, Context context)
@@ -40,7 +40,7 @@ public class test {
                 sum += value.get();
             }
             result.set(sum);
-            sortedList.put(key, result.get());
+            sortedList.put(key.toString(), result.get());
             //context.write(key, result);
         }
 
@@ -48,19 +48,19 @@ public class test {
         protected void cleanup(Context context) throws IOException, InterruptedException {
             super.cleanup(context);
 
-            HashMap<Integer, Text> flippedList = new HashMap<Integer, Text>();
-            for (Text key : sortedList.keySet()) {
+            HashMap<Integer, String> flippedList = new HashMap<Integer, String>();
+            for (String key : sortedList.keySet()) {
                 flippedList.put(sortedList.get(key), key);
             }
 
             ArrayList<Integer> list = new ArrayList<Integer>(flippedList.keySet());
             Collections.sort(list);
             for (int i = list.size() - 1; i > list.size() - 11 && i > 0; i--) {
-                context.write(flippedList.get(list.get(i)), new IntWritable(list.get(i)));
+                context.write(new Text(flippedList.get(list.get(i))), new IntWritable(list.get(i)));
             }
 
-            for (Text key : sortedList.keySet()) {
-                context.write(key, new IntWritable(sortedList.get(key)));
+            for (String key : sortedList.keySet()) {
+                context.write(new Text(key), new IntWritable(sortedList.get(key)));
             }
 
         }

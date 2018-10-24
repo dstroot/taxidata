@@ -20,7 +20,7 @@ public class test {
             String line = value.toString();
             String[] words = line.split(",");
             if (words.length > 10 && !words[0].equals("VendorID")) {
-                word.set(words[5] + "," + words[6] + "-" + words[9] + "," + words[10]);
+                word.set(words[5] + "-" + words[6]);
                 context.write(word, one);
             }
         }
@@ -41,7 +41,7 @@ public class test {
             }
             result.set(sum);
             sortedList.put(result, key);
-            //context.write(key, result);
+            context.write(key, result);
         }
 
         @Override
@@ -51,12 +51,8 @@ public class test {
             Iterator<java.util.Map.Entry<IntWritable , Text>> iter = sortedList.entrySet().iterator();
             java.util.Map.Entry<IntWritable , Text> entry = null;
 
-            while(sortedList.size()>10){
-                entry = iter.next();
-                iter.remove();
-            }
             for (IntWritable intWritable:sortedList.keySet()) {
-                context.write(sortedList.get(intWritable), intWritable);
+                //context.write(sortedList.get(intWritable), intWritable);
             }
 
         }

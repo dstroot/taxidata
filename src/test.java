@@ -30,6 +30,8 @@ public class test {
 
         private IntWritable result = new IntWritable();
 
+        private TreeMap<IntWritable, Text> sortedList = new TreeMap<IntWritable, Text>(new MyComp());
+
 
         public void reduce(Text key, Iterable<IntWritable> values, Context context)
                 throws IOException, InterruptedException {
@@ -38,7 +40,36 @@ public class test {
                 sum += value.get();
             }
             result.set(sum);
-            context.write(key, result);
+            sortedList.put(result, key);
+            //context.write(key, result);
+        }
+
+        @Override
+        protected void cleanup(Context context) throws IOException, InterruptedException {
+            super.cleanup(context);
+
+            Iterator<java.util.Map.Entry<IntWritable , Text>> iter = sortedList.entrySet().iterator();
+            java.util.Map.Entry<IntWritable , Text> entry = null;
+
+            while(sortedList.size()>10){
+                entry = iter.next();
+                iter.remove();
+            }
+            for (IntWritable intWritable:sortedList.keySet()) {
+                context.write(sortedList.get(intWritable), intWritable);
+            }
+
+        }
+
+        static class MyComp implements Comparator<IntWritable>{
+            @Override
+            public int compare(IntWritable e1, IntWritable e2) {
+                if(e1.get()>e2.get()){
+                    return 1;
+                } else {
+                    return -1;
+                }
+            }
         }
     }
 

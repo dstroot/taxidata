@@ -12,11 +12,11 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 public class test {
 
-    public static class Map extends Mapper<IntWritable, Text, Text, DoubleWritable> {
+    public static class Map extends Mapper<LongWritable, Text, Text, DoubleWritable> {
         private final static IntWritable one = new IntWritable(1);
         private Text word = new Text();
 
-        public void map(IntWritable key, Text value, Context context) throws IOException, InterruptedException {
+        public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
             String line = value.toString();
             String[] words = line.split(",");
             if (words.length > 10 && !words[0].equals("VendorID")) {

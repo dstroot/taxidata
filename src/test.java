@@ -12,32 +12,32 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 public class test {
 
-    public static class Map extends Mapper<LongWritable, Text, Text, IntWritable> {
+    public static class Map extends Mapper<DoubleWritable, Text, Text, DoubleWritable> {
         private final static IntWritable one = new IntWritable(1);
         private Text word = new Text();
 
-        public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+        public void map(DoubleWritable key, Text value, Context context) throws IOException, InterruptedException {
             String line = value.toString();
             String[] words = line.split(",");
             if (words.length > 10 && !words[0].equals("VendorID")) {
                 word.set(words[5] + "-" + words[6]);
-                context.write(word, one);
+                context.write(word, new DoubleWritable(Double.parseDouble(words[16])));
             }
         }
     }
 
-    public static class Reduce extends Reducer<Text, IntWritable, Text, IntWritable> {
+    public static class Reduce extends Reducer<Text, DoubleWritable, Text, DoubleWritable> {
 
-        private IntWritable result = new IntWritable();
+        private DoubleWritable result = new DoubleWritable();
 
-        private HashMap<String, Integer> sortedList = new HashMap<String, Integer>();
+        private HashMap<String, Double> sortedList = new HashMap<String, Double>();
 
 
-        public void reduce(Text key, Iterable<IntWritable> values, Context context)
+        public void reduce(Text key, Iterable<DoubleWritable> values, Context context)
                 throws IOException, InterruptedException {
-            int sum = 0;
-            for (IntWritable value : values) {
-                sum += value.get();
+            double sum = 0;
+            for (DoubleWritable value : values) {
+                sum = value.get();
             }
             result.set(sum);
             sortedList.put(key.toString(), result.get());
@@ -48,15 +48,15 @@ public class test {
         protected void cleanup(Context context) throws IOException, InterruptedException {
             super.cleanup(context);
 
-            HashMap<Integer, String> flippedList = new HashMap<Integer, String>();
+            HashMap<Double, String> flippedList = new HashMap<Double, String>();
             for (String key : sortedList.keySet()) {
                 flippedList.put(sortedList.get(key), key);
             }
 
-            ArrayList<Integer> list = new ArrayList<Integer>(flippedList.keySet());
+            ArrayList<Double> list = new ArrayList<Double>(flippedList.keySet());
             Collections.sort(list);
             for (int i = list.size() - 1; i > list.size() - 11 && i > 0; i--) {
-                context.write(new Text(flippedList.get(list.get(i))), new IntWritable(list.get(i)));
+                context.write(new Text(flippedList.get(list.get(i))), new DoubleWritable(list.get(i)));
             }
 
             for (String key : sortedList.keySet()) {

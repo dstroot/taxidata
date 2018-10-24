@@ -55,7 +55,7 @@ public class test {
 
             ArrayList<Integer> list = new ArrayList<Integer>(flippedList.keySet());
             Collections.sort(list);
-            for (int i = list.size() - 1; i > list.size() - 11; i--) {
+            for (int i = list.size() - 1; i > list.size() - 11 && i > 0; i--) {
                 context.write(flippedList.get(list.get(i)), new IntWritable(list.get(i)));
             }
 

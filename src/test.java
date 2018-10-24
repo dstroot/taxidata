@@ -12,7 +12,7 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 public class test {
 
-    public static class Map extends Mapper<DoubleWritable, Text, Text, DoubleWritable> {
+    public static class Map extends Mapper<IntWritable, Text, Text, DoubleWritable> {
         private final static IntWritable one = new IntWritable(1);
         private Text word = new Text();
 
